@@ -1,0 +1,25 @@
+{
+  "name": "string-server",
+  "version": "1.0.0",
+  "description": "String Server enables users to deploy their JavaScript applications instantaneously,\r without the need for any hosting services. The user's workstation (PC/Laptop...) acts as the server.",
+  "main": "StringServerClient.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AJaxRUN/String-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AJaxRUN/String-Server/issues"
+  },
+  "homepage": "https://github.com/AJaxRUN/String-Server#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "simple-peer": "^9.7.2",
+    "watchify": "^3.11.1"
+  }
+}

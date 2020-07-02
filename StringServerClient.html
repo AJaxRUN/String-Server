@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>String Server Client</title>
+    </head>
+    <script src="StringServerClient.js"></script>
+    <body>
+        <div id="statusInfo" style="margin: auto;">Loading...</div>
+        <iframe 
+            id = "mainFrame" 
+            style = "display: none;" 
+            src = "iframe.html"  
+            sandbox = "
+                allow-scripts
+                allow-popups 
+                allow-modals 
+                allow-forms 
+                allow-same-origin 
+                allow-orientation-lock 
+                allow-pointer-lock
+                allow-presentation
+                " 
+            allowfullscreen> 
+        </iframe>
+    </body>
+</html>
+
