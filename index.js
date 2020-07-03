@@ -18,7 +18,16 @@ const enableIframe = () => {
 const disableStatusInfo = () => {
     document.getElementById("statusInfo").style.display = "none";
 }
-
+// To handle global errors
+function ErrHandler(source, head, msg) {
+    const errDiv = document.getElementById("errDiv");
+    const errHead = document.getElementById("errHead");
+    const errMsg = document.getElementById("errMsg");
+    errHead.innerText = head;
+    errMsg.innerText = "Error from "+source+": "+msg;
+    errDiv.style.display = "block";
+}
+ 
 window.onload = () => {
     disableStatusInfo();
     setBodyCSS();
@@ -32,15 +41,6 @@ window.onload = () => {
 //         ceh = true;
 //         console.log("After onload");
 //         const doc = document.getElementById("mainFrame").contentWindow.document;
-//         const serviceFunc = `if ('serviceWorker' in navigator) {
-//                 window.addEventListener('load', function() {
-//                     console.log("inside:", self.origin);
-//                     navigator.serviceWorker.register('sw.js',{scope: './'}).then(function(registration) {
-//                         console.log('Service worker registered with scope: ', registration.scope);
-//                     }, function(err) {
-//                         console.log('ServiceWorker registration failed: ', err);
-//                     });
-//                 });}`;
 //         doc.open();
 //         doc.write('<h1>Test</h1><a href="lol.html">lllllol</a><script>'+serviceFunc+'</script>');
 //         doc.close();

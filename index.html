@@ -3,13 +3,17 @@
     <head>
         <title>String Server Client</title>
     </head>
-    <script src="StringServerClient.js"></script>
+    <script src="index.js"></script>
     <body>
         <div id="statusInfo" style="margin: auto;">Loading...</div>
+        <div id="errDiv" style="width: 40%;margin: auto;margin-top: 200px;padding: 1%;border-radius: 1%;color: #770000;justify-content: center;background-color: #ffaaaa;display: none;">
+            <h1 id="errHead"></h1>
+            <p id="errMsg"></p>
+        </div>
         <iframe 
             id = "mainFrame" 
             style = "display: none;" 
-            src = "iframe.html"  
+            src = "iframe.html"
             sandbox = "
                 allow-scripts
                 allow-popups 
@@ -19,7 +23,7 @@
                 allow-orientation-lock 
                 allow-pointer-lock
                 allow-presentation
-                " 
+                "
             allowfullscreen> 
         </iframe>
     </body>

@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const http = require('http').Server(app);
+const server = require('http').Server(app);
 
 const port = 3000 || process.env.PORT;
 const options = {
@@ -10,5 +10,9 @@ const options = {
     // }
 }
 app.use(express.static(__dirname, options));
+app.post("/", (req, res) => {
+    console.log("req:",req);
+    res.send("Congrats");
+});
 
-http.listen(port, () => console.log(`App active on port ${port}`));
+server.listen(port, () => console.log(`App active on port ${port}`));
