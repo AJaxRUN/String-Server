@@ -8171,17 +8171,48 @@ function config (name) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],34:[function(require,module,exports){
+exports.geturl = () => {
+    return location.href;
+}
+
+},{}],35:[function(require,module,exports){
 const Peer = require("simple-peer");
-const url = location.href;
-console.log("url:",url)
-const request = new Request("/", {method: 'POST', body: 'Hii I am client'});
-fetch(request)
-  .then(response => console.log(response.text()))
-  .catch(err => console.log(err));
+const gg = require("./src/whoAmI");
+const socket = new WebSocket("ws://localhost:8080");
+console.log("ggabcd:",gg.geturl());
+socket.onopen = event => {
+  console.log("Connection established");
+  socket.send("initiateHandshake");
+};
+socket.onerror = error => {
+  console.log(`WebSocket error: ${error}`)
+}
+socket.onclose = event => {
+  console.log(`WebSocket closed: ${event}`)
+}
+
+// const peer = new Peer({
+//   initiator: true,
+//   trickle: false,
+//   stream,
+// });
+
+// peer.on("stream", (stream) => {
+//   console.log("Received stream createPeer:", callerID);
+//   createVideo(stream, userToSignal);
+// });
+
+// peer.on("signal", signal => {
+//   if(signal.type && (signal.type.toString()).toLowerCase() == "offer") {
+//       console.log("received offer:", signal)
+//       socket.emit("sending signal", { userToSignal, callerID, signal })
+//   }
+// })
+
 // Service worker on connection to service worker
 self.addEventListener('fetch', function(event) {
     event.respondWith(async function() {
-      console.log("Receiving...",event.request);
+      // console.log("Receiving...",event.request);
       // (await res).body = "<h1>It works</h1>";
       // console.log("response:",(await res).text())
       // window.history.pushState("", "", '/newpage');
@@ -8190,4 +8221,4 @@ self.addEventListener('fetch', function(event) {
     );
 });
 
-},{"simple-peer":27}]},{},[34]);
+},{"./src/whoAmI":34,"simple-peer":27}]},{},[35]);

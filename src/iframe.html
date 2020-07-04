@@ -2,11 +2,12 @@
 <html lang="en">
 <head></head>
   <body>
+    <a href="/loll">asd</a>
     <script>
       //For registering service worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('serviceWorker.js',{scope: './'}).then(function(registration) {
+            navigator.serviceWorker.register('serviceWorker.js',{scope: 'http://localhost:3000/'}).then(function(registration) {
                 console.log('Service worker registered with scope: ', registration.scope);
             }, function(err) {
                 console.log('ServiceWorker registration failed: ', err);

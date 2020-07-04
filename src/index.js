@@ -34,7 +34,6 @@ window.onload = () => {
     enableIframe();
 }
 
-
 //Main frame onload
 // function mainFrameOnload(mainFrame) { 
 //     if(!ceh) {
