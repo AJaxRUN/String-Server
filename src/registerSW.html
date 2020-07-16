@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+  <body>
+    <h4>
+      Registering Service Worker...
+    </h4>
+    <script>
+      //For registering service worker
+      const stringDomain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+      // console.log("loc:",stringDomain);
+      if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+              navigator.serviceWorker.register('serviceWorker.js',{scope: stringDomain}).then(function(registration) {
+                console.log('Service worker registered with scope: ', registration.scope);
+                window.location.pathname = "/app/" + window.parent.appname + "/initiateCommunication"; 
+              }, function(err) {
+                  window.parent.errHandler(window.location.href, 'ServiceWorker registration failed: ', err);
+              });
+          });
+      }
+      else {
+          alert("Service worker registration error! :(")
+      }
+    </script>
+  </body>
+</html>

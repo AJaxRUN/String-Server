@@ -5,7 +5,7 @@
   "main": "StringServerClient.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "npx watchify ./sw.js -o ./src/serviceWorker.js"
+    "watch": "npx watchify ./index.js -o ./src/index.js"
   },
   "repository": {
     "type": "git",

@@ -3,8 +3,8 @@
     <head>
         <title>String Server Client</title>
     </head>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/static/index.js"></script>
-    <script src="/static/whoAmI.js"></script>
     <body>
         <div id="statusInfo" style="margin: auto;">Loading...</div>
         <div id="errDiv" style="width: 40%;margin: auto;margin-top: 200px;padding: 1%;border-radius: 1%;color: #770000;justify-content: center;background-color: #ffaaaa;display: none;">
@@ -14,7 +14,6 @@
         <iframe 
             id = "mainFrame" 
             style = "display: none;" 
-            src = "/static/iframe.html"
             sandbox = "
                 allow-scripts
                 allow-popups 
