@@ -9,11 +9,7 @@
       window.onload = () => {
         if (navigator.serviceWorker.controller) {
           console.log("Inside")
-          const commResponse = window.parent.initiateCommunication();
-            navigator.serviceWorker.controller.postMessage({
-                type: 'initiateComm',
-                result: commResponse,
-            });
+          
         } else {
           window.parent.errHandler(window.location.href, 'ServiceWorker registration failed: ', err)
         }

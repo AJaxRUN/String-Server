@@ -9,19 +9,27 @@
       //For registering service worker
       const stringDomain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
       // console.log("loc:",stringDomain);
-      if ('serviceWorker' in navigator) {
-          window.addEventListener('load', function() {
-              navigator.serviceWorker.register('serviceWorker.js',{scope: stringDomain}).then(function(registration) {
-                console.log('Service worker registered with scope: ', registration.scope);
-                window.location.pathname = "/app/" + window.parent.appname + "/initiateCommunication"; 
-              }, function(err) {
-                  window.parent.errHandler(window.location.href, 'ServiceWorker registration failed: ', err);
-              });
-          });
-      }
-      else {
-          alert("Service worker registration error! :(")
-      }
+      const registerStringServiceWorker = () => {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('serviceWorker.js',{scope: stringDomain}).then(function(registration) {
+                  console.log('Service worker registered with scope: ', registration.scope);
+                  // window.location.pathname = "/app/" + window.parent.appname + "/initiateCommunication"; 
+                }, function(err) {
+                    window.parent.errHandler(window.location.href, 'ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+        else {
+            window.parent.errHandler(window.location.href, 'No ServiceWorker found in navigator: ', err);
+        }
+    }
+    window.parent.initiateCommunication(registerStringServiceWorker);
+            // navigator.serviceWorker.controller.postMessage({
+            //     type: 'initiateComm',
+            //     result: commResponse,
+            // });
+      
     </script>
   </body>
 </html>

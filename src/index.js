@@ -37,23 +37,21 @@ function ErrHandler(source, msg, err) {
 window.onload = () => {
     disableStatusInfo();
     setBodyCSS();
-    setTimeout(() => enableIframe(), 1000);
+    enableIframe();
 }
 
-function initiateCommunication() {
+function initiateCommunication(registerStringServiceWorker) {
     console.log("Initiating communication!!");
     var socket = io.connect('/');
-    socket.onopen = () => {
-        console.log("connected successfully");
-        socket.send(JSON.stringify({
-            MsgType: "newClient",
-            Data: ""
-        }));
-        socket.onmessage = (event) => {
-            const myEvent = JSON.parse(event.data);
-        }   
-    }
-    return "Successs";
+    socket.emit("client",{ type: "new", appname: appname }); 
+    socket.on("response", (data) => {
+        if(data.type == "err") { 
+            ErrHandler("String Server", "Our services was not able to connect to the remote server", data.msg);
+        }
+        else if(data.type === "success") {
+            console.log(data);
+        }
+    });
 }
 //Main frame onload
 // function mainFrameOnload() { 

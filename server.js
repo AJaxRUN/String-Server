@@ -35,16 +35,16 @@ app.get("/StringEngine/:appname",(req, res) => {
 // });
 
 io.on('connection', (socket) => { 
-    socket.on("newClient", () => {
-        // if(clients < 2) {
-        //     if(clients == 1) {
-        //         socket.emit('createPeer');
-        //     }
-        // }
-        // else {
-        //     io.emit('sessionActive');
-        // }
-        console.log("connected!!!")
+    console.log("neww!!!");
+    socket.on("client", (data) => {
+        if(data.type === "new") {
+            if(liveApps.includes(data.appname)) {
+                socket.emit("response", { type: "success", peerObj: "lol" });
+            }
+            else {
+                socket.emit("response", { type: "err", msg: "The server is not active for " + data.appname });
+            }
+        }
     });
     // socket.on('offer', (offer) => {
     //     console.log("Got offer:")
