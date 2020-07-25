@@ -1,7 +1,11 @@
 // Name of the hosted application
-const appname = window.location.pathname.split(/\//).pop();
-var socket;
-console.log("App name:", appname)
+const urlParams = new URLSearchParams(window.location.search);
+const appname = urlParams.get('appname');
+const apphash = urlParams.get('apphash');
+const socket = io.connect('/');
+var stringInterceptor;
+console.log("App name:", appname, "App hash:", apphash);
+
 // To remove uunnecessary body css
 const setBodyCSS = () => {
     document.body.style.margin = "0";
@@ -24,7 +28,7 @@ const disableStatusInfo = () => {
     document.getElementById("statusInfo").style.display = "none";
 }
 // To handle global errors
-function ErrHandler(source, msg, err) {
+function errHandler(source, msg, err) {
     // const errDiv = document.getElementById("errDiv");
     // const errHead = document.getElementById("errHead");
     // const errMsg = document.getElementById("errMsg");
@@ -42,17 +46,36 @@ window.onload = () => {
 
 function initiateCommunication(registerStringServiceWorker) {
     console.log("Initiating communication!!");
-    var socket = io.connect('/');
-    socket.emit("client",{ type: "new", appname: appname }); 
-    socket.on("response", (data) => {
-        if(data.type == "err") { 
-            ErrHandler("String Server", "Our services was not able to connect to the remote server", data.msg);
-        }
-        else if(data.type === "success") {
-            console.log(data);
-        }
-    });
+    socket.emit("client",{ type: "new", appname: appname, apphash: apphash }); 
 }
+
+const responseHandler = (data) => {
+    if(data.type === "err") { 
+        errHandler("String Server", "Our services was not able to connect to the remote server", data.msg);
+    }
+    // else if(data.type === "success") {
+    //     console.log(data);
+    // }
+};
+
+const serverHandler = (data) => {
+    if(data.type === "stringServerOffer" && data.offer !== undefined) { 
+        stringInterceptor = new SimplePeer({
+            initiator: false,
+            trickle: false
+        });
+        stringInterceptor.on('error', err => errHandler('String Interceptor', '--Peer object error--',err));
+        stringInterceptor.on('data', msg => console.log('message:', msg.toString()));
+        stringInterceptor.on('signal', answer => {
+            socket.emit("client", { type: "stringClientAnswer", answer: answer, apphash: apphash, appname: appname });
+        });
+        stringInterceptor.signal(data.offer);
+    }
+};
+
+socket.on("response", responseHandler);
+socket.on("server", serverHandler);
+
 //Main frame onload
 // function mainFrameOnload() { 
 //         ceh = true;
@@ -63,4 +86,3 @@ function initiateCommunication(registerStringServiceWorker) {
 //         doc.close();
 
 // }
-
