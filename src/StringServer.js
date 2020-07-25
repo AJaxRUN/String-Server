@@ -2,6 +2,7 @@
 const Peer = require("simple-peer");
 const io = require('socket.io-client');
 var socket = io.connect("http://localhost:3000/");
+var readyToTalk = false;
 var peer;
 
 // To inform handshake server about the new active server.
@@ -31,18 +32,14 @@ const clientHandler = (data) => {
         //Send handshake signal to client via Handhshake server
         peer.on('signal', offer => {
             socket.emit("server", { type: "stringServerOffer", clientSocketID: data.clientSocketID, offer: offer} );
-        console.log("sent offer!");
         });
         //On recieving msg -> call messageHandler
         peer.on('data', incomingMessage => stringInterceptor(incomingMessage));
         peer.on('error', err => console.log('error:', err))
     }
     if(data.type === "answer" && data.answer !== undefined) { 
-        console.log("received answer!");
         peer.signal(data.answer);
-        peer.on('connect', () => {
-            peer.send('whatever ddqwd')
-        });
+        peer.on('connect', () => { readyToTalk = true });
     }
 }
 

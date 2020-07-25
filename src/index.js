@@ -3,8 +3,9 @@ const urlParams = new URLSearchParams(window.location.search);
 const appname = urlParams.get('appname');
 const apphash = urlParams.get('apphash');
 const socket = io.connect('/');
+var readyToTalk = false;
 var stringInterceptor;
-console.log("App name:", appname, "App hash:", apphash);
+socket.emit("client",{ type: "new", appname: appname, apphash: apphash }); 
 
 // To remove uunnecessary body css
 const setBodyCSS = () => {
@@ -46,7 +47,16 @@ window.onload = () => {
 
 function initiateCommunication(registerStringServiceWorker) {
     console.log("Initiating communication!!");
-    socket.emit("client",{ type: "new", appname: appname, apphash: apphash }); 
+    registerStringServiceWorker();
+}
+
+const stringResponseHanlder = (msg) => {
+    // if(!readyToTalk) {
+    //     if(msg === "handshakeSuccess") {
+    //         readyToTalk = true;
+    //     }
+    // }
+    console.log("msg: ",msg);
 }
 
 const responseHandler = (data) => {
@@ -65,10 +75,11 @@ const serverHandler = (data) => {
             trickle: false
         });
         stringInterceptor.on('error', err => errHandler('String Interceptor', '--Peer object error--',err));
-        stringInterceptor.on('data', msg => console.log('message:', msg.toString()));
+        stringInterceptor.on('data', stringResponseHanlder);
         stringInterceptor.on('signal', answer => {
             socket.emit("client", { type: "stringClientAnswer", answer: answer, apphash: apphash, appname: appname });
         });
+        stringInterceptor.on('connect', () => { readyToTalk = true; homePageReq(); });
         stringInterceptor.signal(data.offer);
     }
 };
@@ -76,13 +87,15 @@ const serverHandler = (data) => {
 socket.on("response", responseHandler);
 socket.on("server", serverHandler);
 
-//Main frame onload
-// function mainFrameOnload() { 
-//         ceh = true;
-//         console.log("After onload");
-//         const doc = document.getElementById("mainFrame").contentWindow.document;
-//         doc.open();
-//         doc.write('<h1>Test</h1><a href="lol.html">lllllol</a><script>console.log("success");</script>');
-//         doc.close();
+// Request for application home page
+function homePageReq() { 
+        const doc = document.getElementById("mainFrame").contentWindow.document;
+        doc.open();
+        doc.write('<h1>Test</h1><a id="proxyAnchor" href="lol">lllllol</a><script>console.log("success");document.getElementById("proxyAnchor").click();</script>');
+        doc.close();
+}
 
-// }
+const iframeRequestHandler = (reqStr) => {
+    console.log("received new request");
+    peer.send(String({type: "request", request: String(reqStr)}));
+} 

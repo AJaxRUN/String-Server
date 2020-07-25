@@ -14,7 +14,12 @@
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('serviceWorker.js',{scope: stringDomain}).then(function(registration) {
                   console.log('Service worker registered with scope: ', registration.scope);
-                  // window.location.pathname = "/app/" + window.parent.appname + "/initiateCommunication"; 
+                  // window.location.pathname = "/app/" + window.parent.appname + "/initiateCommunication";
+                  
+                  navigator.serviceWorker.addEventListener('message', event => {
+                      console.log(event.data.msg);
+                      window.parent.iframeRequestHandler(event.data.msg);
+                  });
                 }, function(err) {
                     window.parent.errHandler(window.location.href, 'ServiceWorker registration failed: ', err);
                 });
@@ -25,11 +30,9 @@
         }
     }
     window.parent.initiateCommunication(registerStringServiceWorker);
-            // navigator.serviceWorker.controller.postMessage({
-            //     type: 'initiateComm',
-            //     result: commResponse,
-            // });
-      
+            // setTimeout(navigator.serviceWorker.controller.postMessage({
+            //         type: 'hola',
+            //       }), 2000);
     </script>
   </body>
 </html>
