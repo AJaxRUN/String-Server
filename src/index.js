@@ -59,6 +59,11 @@ const stringResponseHanlder = (msg) => {
     console.log("msg: ",msg);
 }
 
+function iframeRequestHandler(reqStr) {
+    console.log("received new request");
+    stringInterceptor.send(JSON.stringify({type: "request", request: reqStr}));
+} 
+
 const responseHandler = (data) => {
     if(data.type === "err") { 
         errHandler("String Server", "Our services was not able to connect to the remote server", data.msg);
@@ -91,11 +96,10 @@ socket.on("server", serverHandler);
 function homePageReq() { 
         const doc = document.getElementById("mainFrame").contentWindow.document;
         doc.open();
-        doc.write('<h1>Test</h1><a id="proxyAnchor" href="lol">lllllol</a><script>console.log("success");document.getElementById("proxyAnchor").click();</script>');
+        doc.write(`<h1>Test</h1><a id="proxyAnchor" href="lol">lllllol</a><script>navigator.serviceWorker.addEventListener('message', event => {
+            console.log("got msg:",event.data.msg);
+            window.parent.iframeRequestHandler(event.data.msg);
+        });console.log("success");document.getElementById("proxyAnchor").click();</script>`);
         doc.close();
 }
 
-const iframeRequestHandler = (reqStr) => {
-    console.log("received new request");
-    peer.send(String({type: "request", request: String(reqStr)}));
-} 

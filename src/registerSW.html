@@ -17,7 +17,7 @@
                   // window.location.pathname = "/app/" + window.parent.appname + "/initiateCommunication";
                   
                   navigator.serviceWorker.addEventListener('message', event => {
-                      console.log(event.data.msg);
+                      console.log("got msg:",event.data.msg);
                       window.parent.iframeRequestHandler(event.data.msg);
                   });
                 }, function(err) {

@@ -8,7 +8,7 @@ var peer;
 socket.emit("server", {type: "new", appname: "test", username: "arjuns"});
 
 const stringInterceptor = (msg) => {
-    console.log('msg: ' + msg);
+    console.log('msg: ' + JSON.parse(msg));
 }
 
 // To handle response from Handshake Server
