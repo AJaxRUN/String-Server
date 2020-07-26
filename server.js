@@ -18,15 +18,10 @@ const options = {
 var liveApps = {};
 app.use("/static", express.static(path.join(__dirname,"src"), options));
 
-// app.get("/StringEngine/:appname",(req, res) => {
-//     console.log("req.params:",req.params)
-//     if(liveApps.includes(req.params.appname)) {
-//         res.sendFile(path.join(__dirname,"src","index.html"));
-//     }   
-//     else {
-//         res.send("The remote server is not active! Please ensure that the server is up and running.");
-//     }
-// });
+app.get("/jk",(req, res) => {
+    console.log("jk requested");
+    res.send("ehyyy");
+});
 
 // app.post("/", (req, res) => {
 //     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;

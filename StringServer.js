@@ -1,5 +1,7 @@
 const Peer = require("simple-peer");
 const io = require('socket.io-client');
+// const fetch = require('node-fetch');
+const { response } = require("express");
 var socket = io.connect("http://localhost:3000/");
 var readyToTalk = false;
 var peer;
@@ -8,7 +10,20 @@ var peer;
 socket.emit("server", {type: "new", appname: "test", username: "arjuns"});
 
 const stringInterceptor = (msg) => {
-    console.log('msg: ' + JSON.parse(msg));
+    var reqObj = JSON.parse(JSON.parse(unescape(msg)).request);
+    var headers = new Headers();
+    reqObj.headers.forEach(pair => {
+        headers.append(pair[0], pair[1]);
+    });
+    reqObj.headers = headers;
+    reqObj.url = "http://localhost:3000/jk";
+    const request = new Request(reqObj);
+    // (async () => {
+    //     const response = await fetch();
+    
+    //     console.log(body);
+    // })();
+    // fetch(request).then(response => response);
 }
 
 // To handle response from Handshake Server

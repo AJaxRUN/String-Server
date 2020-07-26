@@ -34,20 +34,19 @@ self.addEventListener('fetch', function(event) {
     reqObj = event.request;
     event.waitUntil(
       (async (reqObj) => {
-        const headers = deepCopyFunction(reqObj);
-        console.log(headers);
+        var clientRequest = deepCopyFunction(reqObj);
+        clientRequest.headers = Array.from(reqObj.headers.entries());
         const clientId =
           event.resultingClientId !== ""
             ? event.resultingClientId
             : event.clientId;
         const client = await self.clients.get(clientId);
-        client.postMessage(headers);
+        client.postMessage(JSON.stringify(deepCopyFunction(clientRequest)));
       })(reqObj));
     const reqUrl =  new URL(reqObj.url.toString());
     return new Response(`<html><body><p>It is working!!!!!!!</p><script type="text/javascript">
     navigator.serviceWorker.addEventListener('message', event => {
-      console.log("sw's message:",event.data);
-      window.parent.iframeRequestHandler(event.data);
+      window.parent.iframeRequestHandler(String(event.data));
     });</script></body></html>`, {"status" : 200, "headers":{"Content-Type": "text/html"}});
     // if(reqUrl.pathname.includes("/initiateCommunication")) {
     //   return fetch('/static/initiateCommunication.html');

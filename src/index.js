@@ -60,7 +60,7 @@ const stringResponseHanlder = (msg) => {
 }
 
 function iframeRequestHandler(reqStr) {
-    console.log("received new request");
+    console.log("received new request:", reqStr);
     stringInterceptor.send(JSON.stringify({type: "request", request: reqStr}));
 } 
 

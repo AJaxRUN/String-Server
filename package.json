@@ -19,6 +19,7 @@
   "homepage": "https://github.com/AJaxRUN/String-Server#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
     "nodemon": "^2.0.4",
     "simple-peer": "^9.7.2",
     "socketio": "^1.0.0",
