@@ -61,7 +61,7 @@ const stringResponseHanlder = (msg) => {
 
 function iframeRequestHandler(reqStr) {
     console.log("received new request:", reqStr);
-    stringInterceptor.send(JSON.stringify({type: "request", request: reqStr}));
+    stringInterceptor.send(reqStr);
 } 
 
 const responseHandler = (data) => {
@@ -77,7 +77,8 @@ const serverHandler = (data) => {
     if(data.type === "stringServerOffer" && data.offer !== undefined) { 
         stringInterceptor = new SimplePeer({
             initiator: false,
-            trickle: false
+            trickle: false,
+            objectMode: true
         });
         stringInterceptor.on('error', err => errHandler('String Interceptor', '--Peer object error--',err));
         stringInterceptor.on('data', stringResponseHanlder);
