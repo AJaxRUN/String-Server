@@ -22,8 +22,16 @@ const stringInterceptor = (msg) => {
     reqObj.mode = "cors";
     var request = new Request(url, reqObj);
     fetch(request)
-        .then(response => console.log(response))
+        .then(response => sendResponseToClient(response))
         .catch(err => console.log(err));
+}
+
+//Send the response to the client
+const sendResponseToClient = (response) => {
+    console.log(response);
+    var clientResponse = deepCopyFunction(response);
+    clientResponse.headers = Array.from(response.headers.entries());
+    peer.send(JSON.stringify(clientResponse));
 }
 
 // To handle response from Handshake Server
@@ -60,3 +68,24 @@ const clientHandler = (data) => {
 
 socket.on("response", responseHandler);
 socket.on("client", clientHandler);
+
+const deepCopyFunction = (inObject) => {
+    let outObject, value, key
+  
+    if (typeof inObject !== "object" || inObject === null) {
+      return inObject // Return the value if inObject is not an object
+    }
+  
+    // Create an array or object to hold the values
+    outObject = Array.isArray(inObject) ? [] : {}
+  
+    for (key in inObject) {
+      value = inObject[key]
+  
+      // Recursively (deep) copy for nested objects, including arrays
+      outObject[key] = deepCopyFunction(value)
+    }
+  
+    return outObject
+  }
+  

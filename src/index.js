@@ -51,16 +51,12 @@ function initiateCommunication(registerStringServiceWorker) {
 }
 
 const stringResponseHanlder = (msg) => {
-    // if(!readyToTalk) {
-    //     if(msg === "handshakeSuccess") {
-    //         readyToTalk = true;
-    //     }
-    // }
-    console.log("msg: ",msg);
+    msg = msg.replace(/\\/g, "");
+    navigator.serviceWorker.controller.postMessage(msg.toString());
 }
 
 function iframeRequestHandler(reqStr) {
-    console.log("received new request:", reqStr);
+    // console.log("received new request:", reqStr);
     stringInterceptor.send(reqStr);
 } 
 
@@ -97,10 +93,10 @@ socket.on("server", serverHandler);
 function homePageReq() { 
         const doc = document.getElementById("mainFrame").contentWindow.document;
         doc.open();
-        doc.write(`<h1>Test</h1><a id="proxyAnchor" href="lol">lllllol</a><script>navigator.serviceWorker.addEventListener('message', event => {
-            console.log("got msg:",event.data.msg);
-            window.parent.iframeRequestHandler(event.data.msg);
-        });console.log("success");document.getElementById("proxyAnchor").click();</script>`);
+        doc.write(`<h1>Test</h1><a href="/jk">jk</a><script>navigator.serviceWorker.addEventListener('message', event => {
+            console.log("got msg:",event.data);
+            window.parent.iframeRequestHandler(event.data);
+        });console.log("inside Iframe");</script>`);
         doc.close();
 }
 
