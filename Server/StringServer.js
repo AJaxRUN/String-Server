@@ -27,10 +27,13 @@ const stringInterceptor = (msg) => {
 }
 
 //Send the response to the client
-const sendResponseToClient = (response) => {
-    console.log(response);
-    var clientResponse = deepCopyFunction(response);
+const sendResponseToClient = async (response) => {
+    // var clientResponse = deepCopyFunction(response);
+    await console.log(response.clone().json());
+    var clientResponse = _.cloneDeep(response);
+    // console.log(JSON.stringify(clientResponse));
     clientResponse.headers = Array.from(response.headers.entries());
+    // console.log(JSON.stringify(clientResponse));
     peer.send(JSON.stringify(clientResponse));
 }
 
@@ -51,7 +54,7 @@ const clientHandler = (data) => {
             initiator: true,
             trickle: false,
             objectMode: true
-        });
+        }); 
         //Send handshake signal to client via Handhshake server
         peer.on('signal', offer => {
             socket.emit("server", { type: "stringServerOffer", clientSocketID: data.clientSocketID, offer: offer} );

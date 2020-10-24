@@ -19,7 +19,7 @@ var liveApps = {};
 app.use("/static", express.static(path.join(__dirname,"src"), options));
 
 app.get("/jk",(req, res) => {
-    console.log("jk requested");
+    console.log("jk requested in out");
     res.send("ehyyy");
 });
 

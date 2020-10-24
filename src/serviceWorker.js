@@ -31,20 +31,20 @@ self.addEventListener('fetch', function(event) {
   var reqObj;
   event.respondWith(async function() {
     reqObj = event.request;
-    // if(reqObj.url.includes("/stringServerResponse") && reqObj.method == "POST") {
-    //   var msg =  await reqObj.text();
-    //   console.log("Request object body:", msg);
-    //   msg = msg.replace(/\[\"etag",".*""\],?/i,"");
-    //   var resObj = JSON.parse(msg.replace(/\\/g, ""));
-    //   var headers = new Headers();
-    //   resObj.headers.forEach(pair => {
-    //       headers.append(pair[0], pair[1]);
-    //   });
-    //   resObj.headers = headers;
-    //   return new Response(resObj);
-    // }
+    if(reqObj.url.includes("/stringServerResponse") && reqObj.method == "POST") {
+      var msg =  await reqObj.text();
+      console.log("Request object body:", msg);
+      msg = msg.replace(/\[\"etag",".*""\],?/i,"");
+      var resObj = JSON.parse(msg.replace(/\\/g, ""));
+      var headers = new Headers();
+      resObj.headers.forEach(pair => {
+          headers.append(pair[0], pair[1]);
+      });
+      resObj.headers = headers;
+      return new Response(resObj);
+    }
 
-    // else {
+    else {
       console.log("reqqqqq:",reqObj);
       resPromise = new Promise((resolve, reject) => {      
         self.addEventListener('message', event => {
@@ -57,7 +57,8 @@ self.addEventListener('fetch', function(event) {
             headers.append(pair[0], pair[1]);
           });
           resObj.headers = headers;
-          console.log("final:",resObj);
+          // console.log("final:",resObj);
+          console.log("final:",new Response(resObj));
           resolve(new Response(resObj));
         });
       });
@@ -65,12 +66,17 @@ self.addEventListener('fetch', function(event) {
         (async (reqObj) => {
           var clientRequest = deepCopyFunction(reqObj);
           clientRequest.headers = Array.from(reqObj.headers.entries());
-          const clientId =
-            event.resultingClientId !== ""
-              ? event.resultingClientId
-              : event.clientId;
-          const client = await self.clients.get(clientId);
-          client.postMessage(JSON.stringify(clientRequest));
+          // const clientId =
+          //   event.resultingClientId !== ""
+          //     ? event.resultingClientId
+          //     : event.clientId;
+          // const client = await self.clients.get(clientId);
+          // client.postMessage(JSON.stringify(clientRequest));
+          self.clients.matchAll().then(function (clients){
+            clients.forEach(function(client){
+                client.postMessage(JSON.stringify(clientRequest));
+            });
+        }); 
         })(reqObj));
       return resPromise;
       // return new Response(`<html><body><p>It is working!!!!!!!</p><script type="text/javascript">
@@ -102,7 +108,7 @@ self.addEventListener('fetch', function(event) {
     //         console.log("This page is not currently controlled by a service worker.");
     //     }
     //     </script>`;
-    // }
+    }
   }()
   ); 
 });

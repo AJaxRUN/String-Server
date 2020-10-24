@@ -10,6 +10,7 @@ var peer;
 socket.emit("server", {type: "new", appname: "test", username: "arjuns"});
 
 const stringInterceptor = (msg) => {
+    console.log("gotttmessage")
     var reqObj = JSON.parse(JSON.parse(unescape(msg)).request);
     var headers = new Headers();
     reqObj.headers.forEach(pair => {

@@ -7,8 +7,8 @@ const port = 4000 || process.env.PORT;
 app.use("/", express.static(path.join(__dirname)));
 
 app.get("/jk",(req, res) => {
-    console.log("jk requested");
-    res.send("ehyyy");
+    console.log("jk requested inside server");
+    res.send("haha");
 });
 
 
